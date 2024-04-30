@@ -21,11 +21,11 @@ if __name__ == "__main__":
 
     for method, doc in zip_longest(methods, res):
         if doc:
-            print(f"    {method}: {doc.get('count')}")
+            print(f"\tmethod {method}: {doc.get('count')}")
         else:
-            print(f"    {method}: 0")
+            print(f"\tmethod {method}: 0")
 
     status_count = nginx_collection.count_documents(
         {"method": "GET", "path": "/status"}
     )
-    print(f"{status_count} status check", end="")
+    print(f"{status_count} status check")
