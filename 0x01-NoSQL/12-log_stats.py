@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 "Log stats"
 
-if __name__ == "__main__":
-    from itertools import zip_longest
-    from pymongo import MongoClient
+from itertools import zip_longest
+from pymongo import MongoClient
 
+
+def nginx_logs():
+    "provides some stats about Nginx logs stored in MongoDB"
     client = MongoClient("mongodb://127.0.0.1:27017")
     nginx_collection = client.logs.nginx
 
@@ -21,12 +23,14 @@ if __name__ == "__main__":
     )
 
     for method, doc in zip_longest(methods, res):
-        if doc:
-            print(f"\tmethod {method}: {doc.get('count')}")
-        else:
-            print(f"\tmethod {method}: 0")
+        count = doc.get("count") if doc else 0
+        print(f"\tmethod {method}: {count}")
 
     status_count = nginx_collection.count_documents(
         {"method": "GET", "path": "/status"}
     )
     print(f"{status_count} status check")
+
+
+if __name__ == "__main__":
+    nginx_logs()
