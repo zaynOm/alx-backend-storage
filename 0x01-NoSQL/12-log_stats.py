@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 "Log stats"
 
-from itertools import zip_longest
 from pymongo import MongoClient
 
 
@@ -14,16 +13,8 @@ def nginx_logs():
 
     print(f"{nginx_collection.count_documents({})} logs")
     print("Methods:")
-    res = nginx_collection.aggregate(
-        [
-            {"$match": {"method": {"$in": methods}}},
-            {"$group": {"_id": "$method", "count": {"$count": {}}}},
-            {"$sort": {"count": -1}},
-        ]
-    )
-
-    for method, doc in zip_longest(methods, res):
-        count = doc.get("count") if doc else 0
+    for method in methods:
+        count = nginx_collection.count_documents({"method": method})
         print(f"\tmethod {method}: {count}")
 
     status_count = nginx_collection.count_documents(
