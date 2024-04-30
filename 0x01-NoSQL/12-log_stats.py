@@ -16,6 +16,7 @@ if __name__ == "__main__":
         [
             {"$match": {"method": {"$in": methods}}},
             {"$group": {"_id": "$method", "count": {"$count": {}}}},
+            {"$sort": {"count": -1}},
         ]
     )
 
