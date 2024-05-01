@@ -13,8 +13,8 @@ def count_calls(method: Callable) -> Callable:
     @wraps(method)
     def wrapper(self, *args, **kwds):
         "keep track of func calls"
-        count = method.__qualname__
-        self._redis.incr(count)
+        key = method.__qualname__
+        self._redis.incr(key)
         return method(self, *args, **kwds)
 
     return wrapper
@@ -43,8 +43,8 @@ class Cache:
 
     def get_str(self, key: str) -> str:
         "Retrive stored string"
-        return self.get(key, fn=str)
+        return self.get(key, str)
 
     def get_int(self, key: int) -> int:
         "Retrive stored integer"
-        return self.get(key, fn=int)
+        return self.get(key, int)
