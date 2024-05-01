@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
 "Writing strings to Redis"
 
+from functools import wraps
 from typing import Callable, Optional, Union
 import redis
 import uuid
+
+
+def count_calls(method: Callable) -> Callable:
+    "Incrementing values"
+
+    @wraps(method)
+    def wrapper(self, *args, **kwds):
+        count = method.__qualname__
+        self._redis.incr(count)
+
+    return wrapper
 
 
 class Cache:
@@ -13,6 +25,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         "Srores the input data in Redis"
         key = str(uuid.uuid4())
