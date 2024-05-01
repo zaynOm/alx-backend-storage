@@ -12,6 +12,7 @@ def count_calls(method: Callable) -> Callable:
 
     @wraps(method)
     def wrapper(self, *args, **kwds):
+        "keep track of func calls"
         count = method.__qualname__
         self._redis.incr(count)
         return method(self, *args, **kwds)
