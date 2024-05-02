@@ -14,7 +14,8 @@ def count_calls(method: Callable) -> Callable:
     def wrapper(self, *args, **kwds):
         "keep track of func calls"
         key = method.__qualname__
-        self._redis.incr(key)
+        if isinstance(self._redis, redis.Redis):
+            self._redis.incr(key)
         return method(self, *args, **kwds)
 
     return wrapper
