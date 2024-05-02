@@ -10,10 +10,10 @@ import uuid
 def count_calls(method: Callable) -> Callable:
     "Incrementing values"
 
+    key = method.__qualname__
     @wraps(method)
     def wrapper(self, *args, **kwds):
         "keep track of func calls"
-        key = method.__qualname__
         if isinstance(self._redis, redis.Redis):
             self._redis.incr(key)
         return method(self, *args, **kwds)
