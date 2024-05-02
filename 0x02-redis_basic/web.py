@@ -23,7 +23,7 @@ def cache_page(f: Callable) -> Callable:
                 return cached_page.decode("utf-8")
             res = f(url)
             r.setex(cache_key, 10, res)
-            r.set(count_key, 0)
+            r.set(count_key, 1)
 
             return res
 
