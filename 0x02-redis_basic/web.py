@@ -12,7 +12,7 @@ def cache_page(f):
     @wraps(f)
     def wrapper(*args, **kwds):
         with redis.Redis() as r:
-            cache_key = "cache: {args[0]}"
+            cache_key = f"cache: {args[0]}"
             count_key = f"count:{args[0]}"
 
             cached_page = r.get(cache_key)
